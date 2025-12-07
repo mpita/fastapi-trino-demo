@@ -15,19 +15,19 @@ Esta aplicación sirve como interfaz de prueba para consultar datos almacenados 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        FastAPI Application                       │
-│                    (Esta aplicación - Puerto 8000)               │
+│                        FastAPI Application                      │
+│                    (Esta aplicación - Puerto 8000)              │
 └─────────────────────────────────────────────────────────────────┘
                                    │
                                    ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Trino (v478)                             │
-│              Motor de consultas SQL distribuido                  │
-│                    (Puerto 8080 - Compute Layer)                 │
+│                         Trino (v478)                            │
+│              Motor de consultas SQL distribuido                 │
+│                    (Puerto 8080 - Compute Layer)                │
 └─────────────────────────────────────────────────────────────────┘
                                    │
                     ┌──────────────┴──────────────┐
-                    ▼                              ▼
+                    ▼                             ▼
 ┌───────────────────────────┐      ┌───────────────────────────────┐
 │   Hive Metastore (v4.0)   │      │      Apache Iceberg           │
 │   Catálogo de metadatos   │      │   Formato de tabla ACID       │
