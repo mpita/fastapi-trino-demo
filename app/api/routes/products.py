@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.api.deps import SessionDep
 from app.models import ProductsList, Products
 from sqlmodel import select, func, desc
@@ -22,3 +22,13 @@ async def list_products(
     )
     products = session.exec(query).all()
     return ProductsList(data=products, count=count)
+
+@router.get("/{product_id}", response_model=Products)
+async def read_product(
+    product_id: int,
+    session: SessionDep,
+) -> Products:
+    product = session.get(Products, product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
