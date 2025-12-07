@@ -1,0 +1,15 @@
+[project]
+name = "fastapi-trino"
+version = "0.1.0"
+description = "A DEMO with FastAPI application with Trino integration"
+authors = [
+    { name = "Manuel Pita"},
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.124.0",
+    "pydantic-settings>=2.12.0",
+    "sqlmodel>=0.0.27",
+    "trino>=0.336.0",
+]
