@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.api.deps import SessionDep
 from app.models import SalesList, Sales
 from sqlmodel import select, func, desc
@@ -22,3 +22,13 @@ async def list_sales(
     )
     sales = session.exec(query).all()
     return SalesList(data=sales, count=count)
+
+@router.get("/{sale_id}", response_model=Sales)
+async def read_sale(
+    sale_id: int,
+    session: SessionDep,
+) -> Sales:
+    sale = session.get(Sales, sale_id)
+    if not sale:
+        raise HTTPException(status_code=404, detail="Sale not found")
+    return sale
