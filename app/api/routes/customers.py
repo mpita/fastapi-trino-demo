@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.api.deps import SessionDep
 from app.models import CustomersList, Customers
 from sqlmodel import select, func, desc
@@ -22,3 +22,14 @@ async def list_customers(
     )
     customers = session.exec(query).all()
     return CustomersList(data=customers, count=count)
+
+
+@router.get("/{customer_id}", response_model=Customers)
+async def read_customer(
+    customer_id: int,
+    session: SessionDep,
+) -> Customers:
+    customer = session.get(Customers, customer_id)
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return customer
