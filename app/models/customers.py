@@ -1,9 +1,14 @@
 from datetime import date, datetime
-from sqlmodel import SQLModel, Field
+from typing import TYPE_CHECKING
+from sqlmodel import SQLModel, Field, Relationship
+
+if TYPE_CHECKING:
+    from .sales import Sales
 
 
-class Customers(SQLModel, table=True):
-    customer_id: int = Field(default=None, primary_key=True)
+# Base model with common fields (for responses)
+class CustomerBase(SQLModel):
+    customer_id: int
     first_name: str
     last_name: str
     gender: str
@@ -26,6 +31,12 @@ class Customers(SQLModel, table=True):
     home_owner: bool
 
 
+# Table model (for database)
+class Customers(CustomerBase, table=True):
+    customer_id: int = Field(default=None, primary_key=True)
+    sales: list["Sales"] = Relationship(back_populates="customer")
+
+
 class CustomersList(SQLModel):
-    data: list[Customers]
+    data: list[CustomerBase]
     count: int

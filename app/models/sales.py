@@ -1,9 +1,15 @@
 from datetime import date, datetime
-from sqlmodel import SQLModel, Field
+from typing import TYPE_CHECKING, Optional
+from sqlmodel import SQLModel, Field, Relationship
+
+if TYPE_CHECKING:
+    from .customers import Customers
+    from .products import Products
 
 
-class Sales(SQLModel, table=True):
-    sale_id: int = Field(default=None, primary_key=True)
+# Base model with common fields
+class SaleBase(SQLModel):
+    sale_id: int
     customer_id: int
     product_id: int
     sale_date: date
@@ -17,6 +23,16 @@ class Sales(SQLModel, table=True):
     channel: str
 
 
+# Table model (for database)
+class Sales(SaleBase, table=True):
+    sale_id: int = Field(default=None, primary_key=True)
+    customer_id: int = Field(foreign_key="customers.customer_id")
+    product_id: int = Field(foreign_key="products.product_id")
+    customer: Optional["Customers"] = Relationship(back_populates="sales")
+    product: Optional["Products"] = Relationship(back_populates="sales")
+
+
+# Response model for list
 class SalesList(SQLModel):
-    data: list[Sales]
+    data: list[SaleBase]
     count: int
